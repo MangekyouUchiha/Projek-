@@ -227,30 +227,29 @@ void loop() {
   lcd.print(volt, 2);
   lcd.print("V");
 
-  unsigned long currentLogTime = millis();
-  if (currentLogTime - previousLogTime >= dataLogInterval) {
-    previousLogTime = currentLogTime;
-    logData(ampere, ampere);
-  }
+  int startHour = 9, startMinute = 00;  // Waktu mulai motor berjalan
+  int stopHour = 15, stopMinute = 00;    // Waktu berhenti motor
 
-  int startHour = 23, startMinute = 30;  // Waktu mulai motor berjalan
-  int stopHour = 1, stopMinute = 00;    // Waktu berhenti motor
-
-  int lockHour = 1, lockMinute = 05;  // Waktu motor dikunci
-  int unlockHour = 1, unlockMinute = 10; // Waktu motor tidak terkunci lagi
+  int lockHour = 15, lockMinute = 01;  // Waktu motor dikunci
+  int unlockHour = 16, unlockMinute = 50; // Waktu motor tidak terkunci lagi
 
   if (isTimeInRange(now.hour(), now.minute(), startHour, startMinute, stopHour, stopMinute)) {
+    unsigned long currentLogTime = millis();
+    if (currentLogTime - previousLogTime >= dataLogInterval) {
+    previousLogTime = currentLogTime;
+    logData(ampere, volt);
+  }
     motor(); // Jalankan motor jika dalam rentang waktu
   }
 
   else if (isTimeInRange(now.hour(), now.minute(), lockHour, lockMinute, unlockHour, unlockMinute)) {
     lockMotor(); // Kunci motor di posisi terakhir
   } 
-  else if (now.hour() == 23  && now.minute() == 19) {
+  else if (now.hour() == 16  && now.minute() == 51) {
     moveBackStepper();
   } 
   
-  else if (now.hour() == 23 && now.minute() ==  25) {
+  else if (now.hour() == 17 && now.minute() ==  10) {
     moveBackStepper();
   } 
 
